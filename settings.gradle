@@ -1,0 +1,3 @@
+rootProject.name = 'javaUpgrade'
+include 'L15-structuralPatterns:demo'
+include 'L15-structuralPatterns:homework'

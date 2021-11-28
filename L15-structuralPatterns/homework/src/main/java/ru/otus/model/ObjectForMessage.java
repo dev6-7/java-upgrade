@@ -5,6 +5,13 @@ import java.util.List;
 public class ObjectForMessage {
     private List<String> data;
 
+    public ObjectForMessage() {
+    }
+
+    public ObjectForMessage(List<String> data) {
+        this.data = data;
+    }
+
     public List<String> getData() {
         return data;
     }

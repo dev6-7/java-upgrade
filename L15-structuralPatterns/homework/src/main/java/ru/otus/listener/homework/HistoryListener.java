@@ -6,13 +6,15 @@ import java.util.Optional;
 
 public class HistoryListener implements Listener, HistoryReader {
 
+    private final MessageOriginator messageOriginator = new MessageOriginator();
+
     @Override
     public void onUpdated(Message msg) {
-        throw new UnsupportedOperationException();
+        messageOriginator.saveState(msg);
     }
 
     @Override
     public Optional<Message> findMessageById(long id) {
-        throw new UnsupportedOperationException();
+        return Optional.of(messageOriginator.findMessage(id));
     }
 }

@@ -1,6 +1,5 @@
 package ru.otus.dataprocessor;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -18,7 +17,6 @@ class ProcessorTest {
     //Надо реализовать методы классов и убедиться, что тест проходит
 
     @Test
-    @Disabled // Эту аннотацию надо убрать
     @DisplayName("Из файла читается json, обрабатывается, результат сериализуется в строку")
     void processingTest(@TempDir Path tempDir) throws IOException {
         System.out.println(tempDir);
@@ -26,7 +24,7 @@ class ProcessorTest {
         //given
         var inputDataFileName = "inputData.json";
         var outputDataFileName = "outputData.json";
-        var fullOutputFilePath = String.format("%s%s%s",tempDir, File.separator, outputDataFileName);
+        var fullOutputFilePath = String.format("%s%s%s", tempDir, File.separator, outputDataFileName);
 
         var loader = new FileLoader(inputDataFileName);
         var processor = new ProcessorAggregator();

@@ -7,16 +7,22 @@ import org.junit.jupiter.api.function.Executable;
 import ru.otus.model.Message;
 import ru.otus.processor.Processor;
 import ru.otus.processor.ProcessorEvenSecondCheck;
+import ru.otus.provider.DateTimeProvider;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class EvenSecondProcessorTest {
 
     @Test
     @DisplayName("Тестируем обработку исключения процессора ProcessorEvenSecondCheck")
     void ProcessorEvenSecondCheckTest() {
+        var dateTimeProvider = mock(DateTimeProvider.class);
+        when(dateTimeProvider.currentTimeMillis()).thenReturn(System.currentTimeMillis());
+
         //given
         var testMessage = new Message.Builder(1L)
                 .field1("field1")
@@ -28,7 +34,7 @@ class EvenSecondProcessorTest {
         });
 
         Executable process = () -> {
-            long startTime = System.currentTimeMillis();
+            long startTime = dateTimeProvider.currentTimeMillis();
 
             while (true) {
                 try {
@@ -37,7 +43,7 @@ class EvenSecondProcessorTest {
                     break;
                 }
                 // Предохранитель, чтобы в бесконечный цикл не уйти, тест упадет после выхода.
-                if (System.currentTimeMillis() - startTime > 10000) {
+                if (dateTimeProvider.currentTimeMillis() - startTime > 10000) {
                     return;
                 }
             }

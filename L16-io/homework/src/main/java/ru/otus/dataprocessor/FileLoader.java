@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import ru.otus.model.Measurement;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import java.util.Objects;
 
 public class FileLoader implements Loader {
 
-    private String fileName;
+    private final String fileName;
 
     public FileLoader(String fileName) {
         this.fileName = fileName;
@@ -22,7 +23,7 @@ public class FileLoader implements Loader {
     public List<Measurement> load() {
         Measurement[] measurements = null;
         try (BufferedReader reader = new BufferedReader(
-                new FileReader(this.getClass().getClassLoader().getResource(fileName).getFile()))
+                new FileReader(ClassLoader.getSystemResource(fileName).getFile()))
         ) {
             Gson gson = new Gson();
             measurements = gson.fromJson(reader, Measurement[].class);

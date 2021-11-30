@@ -4,6 +4,7 @@ import ru.otus.handler.ComplexProcessor;
 import ru.otus.listener.ListenerPrinterConsole;
 import ru.otus.model.Message;
 import ru.otus.processor.*;
+import ru.otus.provider.DateTimeProviderImpl;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class Demo {
         var processors = List.of(new ProcessorConcatFields(),
                 new LoggerProcessor(new ProcessorUpperField10()),
                 new ProcessorSwapFields(),
-                new ProcessorEvenSecondCheck());
+                new ProcessorEvenSecondCheck(new DateTimeProviderImpl()));
 
         var complexProcessor = new ComplexProcessor(processors, ex -> {
         });

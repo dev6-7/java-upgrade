@@ -1,8 +1,7 @@
 package ru.otus.processor;
 
 import ru.otus.model.Message;
-
-import java.time.LocalDateTime;
+import ru.otus.provider.DateTimeProvider;
 
 public class ProcessorEvenSecondCheck implements Processor {
 
@@ -12,9 +11,15 @@ public class ProcessorEvenSecondCheck implements Processor {
         }
     }
 
+    private DateTimeProvider dateTimeProvider;
+
+    public ProcessorEvenSecondCheck(DateTimeProvider dateTimeProvider) {
+        this.dateTimeProvider = dateTimeProvider;
+    }
+
     @Override
     public Message process(Message message) {
-        var second = LocalDateTime.now().getSecond();
+        var second = dateTimeProvider.getSecond();
         if (second % 2 == 0) {
             throw new EvenSecondException();
         }

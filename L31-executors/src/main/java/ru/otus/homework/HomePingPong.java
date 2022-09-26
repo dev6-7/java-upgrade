@@ -48,8 +48,6 @@ public class HomePingPong {
 
         thread1.setName("First");
         thread2.setName("Second");
-        thread1.setPriority(1);
-        thread2.setPriority(2);
 
         thread1.start();
         while (true) {

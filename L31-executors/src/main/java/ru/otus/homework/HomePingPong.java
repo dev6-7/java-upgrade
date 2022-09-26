@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 public class HomePingPong {
     private static final Logger logger = LoggerFactory.getLogger(HomePingPong.class);
     private static int counter = 0;
-    private static boolean done = true;
+    private static boolean done = false;
     private static boolean isOperatorPlus = true;
 
     private synchronized void action(int c) {
@@ -15,12 +15,16 @@ public class HomePingPong {
                 //spurious wakeup https://en.wikipedia.org/wiki/Spurious_wakeup
                 while (done) {
                     done = false;
-                    logger.info(Thread.currentThread().getName() + " - waiting");
+                    logger.info("----> {} - waiting", Thread.currentThread().getName());
                     this.wait();
                 }
 
-                if(counter == 1) isOperatorPlus = true;
-                if(counter == 10) isOperatorPlus = false;
+                if (counter == 1) {
+                    isOperatorPlus = true;
+                }
+                if (counter == 10) {
+                    isOperatorPlus = false;
+                }
 
                 counter = isOperatorPlus ? counter + c : counter - c;
 
@@ -29,7 +33,7 @@ public class HomePingPong {
                 done = true;
                 notifyAll();
 
-                logger.info(Thread.currentThread().getName() + " - counter: " + counter + " - after notify");
+                logger.info("----> {} - counter: {} - after notify", Thread.currentThread().getName(), counter);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
@@ -39,9 +43,21 @@ public class HomePingPong {
     public static void main(String[] args) {
         HomePingPong homePingPong = new HomePingPong();
 
+        Thread thread1 = new Thread(() -> homePingPong.action(1));
+        Thread thread2 = new Thread(() -> homePingPong.action(0));
 
-        new Thread(() -> homePingPong.action(0)).start();
-        new Thread(() -> homePingPong.action(1)).start();
+        thread1.setName("First");
+        thread2.setName("Second");
+        thread1.setPriority(1);
+        thread2.setPriority(2);
+
+        thread1.start();
+        while (true) {
+            if (thread1.isAlive()) {
+                thread2.start();
+                break;
+            }
+        }
     }
 
     private static void sleep() {

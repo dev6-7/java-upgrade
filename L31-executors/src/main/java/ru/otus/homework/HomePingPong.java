@@ -6,15 +6,15 @@ import org.slf4j.LoggerFactory;
 public class HomePingPong {
     private static final Logger logger = LoggerFactory.getLogger(HomePingPong.class);
     private static int counter = 0;
-    private static boolean done = false;
     private static boolean isOperatorPlus = true;
 
-    private synchronized void action(int c) {
+    private int lastImplementStep = 0;
+
+    private synchronized void action(int implementStep) {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 //spurious wakeup https://en.wikipedia.org/wiki/Spurious_wakeup
-                while (done) {
-                    done = false;
+                while (lastImplementStep == implementStep) {
                     logger.info("----> {} - waiting", Thread.currentThread().getName());
                     this.wait();
                 }
@@ -26,11 +26,12 @@ public class HomePingPong {
                     isOperatorPlus = false;
                 }
 
-                counter = isOperatorPlus ? counter + c : counter - c;
+                counter = isOperatorPlus ? counter + implementStep : counter - implementStep;
 
                 sleep();
 
-                done = true;
+                lastImplementStep = implementStep;
+
                 notifyAll();
 
                 logger.info("----> {} - counter: {} - after notify", Thread.currentThread().getName(), counter);
@@ -50,12 +51,8 @@ public class HomePingPong {
         thread2.setName("Second");
 
         thread1.start();
-        while (true) {
-            if (thread1.isAlive()) {
-                thread2.start();
-                break;
-            }
-        }
+        thread2.start();
+
     }
 
     private static void sleep() {

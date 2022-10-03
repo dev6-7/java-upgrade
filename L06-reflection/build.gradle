@@ -2,12 +2,11 @@ plugins {
     id 'java'
 }
 
-sourceCompatibility = JavaVersion.VERSION_15
-targetCompatibility = JavaVersion.VERSION_15
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
-    implementation 'org.projectlombok:lombok:1.18.22'
-    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    implementation("ch.qos.logback:logback-classic")
     implementation 'org.apache.directory.studio:org.slf4j.api:1.7.2'
 }
 

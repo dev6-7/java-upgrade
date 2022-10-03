@@ -1,6 +1,7 @@
 package ru.otus.test;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.annotation.After;
 import ru.otus.annotation.Before;
 import ru.otus.annotation.Test;
@@ -12,8 +13,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-@Slf4j
 public class TestRunService {
+    private static final Logger log = LoggerFactory.getLogger(TestRunService.class);
 
     public static void main(String[] args) {
         run("ru.otus.test.TestMain");
@@ -45,7 +46,7 @@ public class TestRunService {
                 }
             });
 
-            log.info("{} Errors,{} Success", exceptionCounter.get(), tests.size()-exceptionCounter.get());
+            log.info("{} Errors,{} Success", exceptionCounter.get(), tests.size() - exceptionCounter.get());
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
